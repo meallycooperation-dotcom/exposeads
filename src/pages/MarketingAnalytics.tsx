@@ -292,7 +292,11 @@ const MarketingAnalytics = () => {
                     tick={{ fontSize: 12 }}
                   />
                   <YAxis />
-                  <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                  <Tooltip
+                    formatter={(value: number | string) =>
+                      typeof value === "number" ? formatCurrency(value) : String(value ?? "")
+                    }
+                  />
                   <Legend />
                   <Bar dataKey="avgPrice" fill="#111827" name="Average Price" />
                 </BarChart>
@@ -334,7 +338,11 @@ const MarketingAnalytics = () => {
                       <Cell key={idx} fill={pieColors[idx % pieColors.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(v: number) => formatCurrency(v)} />
+                  <Tooltip
+                    formatter={(v: number | string) =>
+                      typeof v === "number" ? formatCurrency(v) : String(v ?? "")
+                    }
+                  />
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>

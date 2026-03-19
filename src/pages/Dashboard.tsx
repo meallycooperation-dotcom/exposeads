@@ -232,7 +232,11 @@ const Dashboard = () => {
                         <XAxis dataKey="name" angle={-45} textAnchor="end" height={70} interval={0} tick={{ fontSize: 11 }} />
                         <YAxis yAxisId="left" />
                         <YAxis yAxisId="right" orientation="right" />
-                        <Tooltip formatter={(value: number) => formatKES(value)} />
+                        <Tooltip
+                          formatter={(value: number | string) =>
+                            typeof value === "number" ? formatKES(value) : String(value ?? "")
+                          }
+                        />
                         <Legend />
                         <Bar yAxisId="left" dataKey="spendValue" fill="#111827" name="Spend" radius={[4, 4, 0, 0]} />
                         <Area yAxisId="right" type="monotone" dataKey="revenueValue" stroke="#10b981" fill="url(#revGradient)" name="Revenue" />
@@ -249,7 +253,11 @@ const Dashboard = () => {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis type="number" />
                         <YAxis type="category" dataKey="name" width={80} tick={{ fontSize: 11 }} />
-                        <Tooltip formatter={(value: number) => value + '%'} />
+                        <Tooltip
+                          formatter={(value: number | string) =>
+                            typeof value === "number" ? `${value.toFixed(0)}%` : String(value ?? "")
+                          }
+                        />
                         <Legend />
                         <Bar dataKey={(c) => {
                           const roi = ((c.revenueValue - c.spendValue) / c.spendValue * 100)
