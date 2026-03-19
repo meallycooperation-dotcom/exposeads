@@ -1,8 +1,5 @@
 ﻿import { useEffect, useState } from "react"
-import { 
-  Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, 
-  CartesianGrid, ComposedChart, Area, PieChart, Pie, Cell, Legend 
-} from "recharts"
+import { Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, CartesianGrid, ComposedChart, Area, PieChart, Pie, Cell, Legend } from "recharts"
 import { supabase } from "../lib/supabase"
 import Sidebar from "../components/Sidebar"
 import Topbar from "../components/Topbar"
@@ -233,9 +230,7 @@ const Dashboard = () => {
                         <YAxis yAxisId="left" />
                         <YAxis yAxisId="right" orientation="right" />
                         <Tooltip
-                          formatter={(value: number | string) =>
-                            typeof value === "number" ? formatKES(value) : String(value ?? "")
-                          }
+                          formatter={(value: any) => (typeof value === "number" ? formatKES(value) : value)}
                         />
                         <Legend />
                         <Bar yAxisId="left" dataKey="spendValue" fill="#111827" name="Spend" radius={[4, 4, 0, 0]} />
@@ -254,9 +249,7 @@ const Dashboard = () => {
                         <XAxis type="number" />
                         <YAxis type="category" dataKey="name" width={80} tick={{ fontSize: 11 }} />
                         <Tooltip
-                          formatter={(value: number | string) =>
-                            typeof value === "number" ? `${value.toFixed(0)}%` : String(value ?? "")
-                          }
+                          formatter={(value: any) => (typeof value === "number" ? `${value.toFixed(0)}%` : value)}
                         />
                         <Legend />
                         <Bar dataKey={(c) => {
@@ -303,13 +296,13 @@ const Dashboard = () => {
                           cx="50%"
                           cy="50%"
                           outerRadius={60}
-                          label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
+                          label={({ percent = 0 }) => `${(percent * 100).toFixed(0)}%`}
                         >
                           {channelDistribution.map((_, idx) => (
                             <Cell key={idx} fill={pieColors[idx % pieColors.length]} />
                           ))}
                         </Pie>
-                        <Tooltip formatter={(value: number) => formatKES(value)} />
+                        <Tooltip formatter={(value: any) => (typeof value === "number" ? `${value.toFixed(0)}%` : value)} />
                         <Legend />
                       </PieChart>
                     </ResponsiveContainer>
@@ -327,7 +320,7 @@ const Dashboard = () => {
                           cx="50%"
                           cy="50%"
                           outerRadius={60}
-                          label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
+                          label={({ percent = 0 }) => `${(percent * 100).toFixed(0)}%`}
                         >
                           {statusDistribution.map((entry, idx) => (
                             <Cell key={idx} fill={
@@ -354,7 +347,7 @@ const Dashboard = () => {
                           cx="50%"
                           cy="50%"
                           outerRadius={60}
-                          label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
+                          label={({ percent = 0 }) => `${(percent * 100).toFixed(0)}%`}
                         >
                           {leadStageDistribution.map((entry, idx) => (
                             <Cell key={idx} fill={
@@ -381,7 +374,7 @@ const Dashboard = () => {
                           cx="50%"
                           cy="50%"
                           outerRadius={60}
-                          label={({ name, percent }) => `${(percent * 100).toFixed(0)}%`}
+                          label={({ percent = 0 }) => `${(percent * 100).toFixed(0)}%`}
                         >
                           {clientHealthDistribution.map((entry, idx) => (
                             <Cell key={idx} fill={entry.name === 'Active' ? '#10b981' : '#ef4444'} />

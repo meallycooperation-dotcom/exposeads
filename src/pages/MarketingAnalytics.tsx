@@ -239,7 +239,7 @@ const MarketingAnalytics = () => {
                       cx="50%"
                       cy="50%"
                       outerRadius={80}
-                      label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                       label={({ percent = 0 }) => `${(percent * 100).toFixed(0)}%`}
                     >
                       {categoryDistribution.map((_, idx) => (
                         <Cell key={idx} fill={pieColors[idx % pieColors.length]} />
@@ -263,7 +263,7 @@ const MarketingAnalytics = () => {
                       cx="50%"
                       cy="50%"
                       outerRadius={80}
-                      label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                       label={({ percent = 0 }) => `${(percent * 100).toFixed(0)}%`}
                     >
                       {sizeDistribution.map((_, idx) => (
                         <Cell key={idx} fill={pieColors[idx % pieColors.length]} />
@@ -293,10 +293,10 @@ const MarketingAnalytics = () => {
                   />
                   <YAxis />
                   <Tooltip
-                    formatter={(value: number | string) =>
-                      typeof value === "number" ? formatCurrency(value) : String(value ?? "")
-                    }
-                  />
+  formatter={(value: any) =>
+    typeof value === "number" ? formatCurrency(value) : String(value ?? "")
+  }
+/>
                   <Legend />
                   <Bar dataKey="avgPrice" fill="#111827" name="Average Price" />
                 </BarChart>
@@ -332,17 +332,18 @@ const MarketingAnalytics = () => {
                     cx="50%"
                     cy="50%"
                     outerRadius={80}
-                    label={({ name, value }) => `${name.substring(0, 15)}...`}
+                    label={({ name }) => `${(name || "Unknown").substring(0, 15)}...`}
                   >
                     {topPriceSlices.map((_, idx) => (
                       <Cell key={idx} fill={pieColors[idx % pieColors.length]} />
                     ))}
                   </Pie>
                   <Tooltip
-                    formatter={(v: number | string) =>
-                      typeof v === "number" ? formatCurrency(v) : String(v ?? "")
-                    }
-                  />
+  formatter={(v: any) => 
+    typeof v === "number" ? formatCurrency(v) : (v ?? "")
+  }
+/>
+                  
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
