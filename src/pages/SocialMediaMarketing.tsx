@@ -87,7 +87,7 @@ const PostBreakdown = ({
             stroke="#e5e7eb"
             strokeWidth="20"
           />
-          {slices.map((slice, idx) => (
+          {slices.map((slice) => (
             <circle
               key={slice.label}
               cx="60"
@@ -396,7 +396,6 @@ const SocialMediaMarketing = () => {
                   .map((post) => (
                   <div
                     key={post.post_id}
-                    className="rounded-lg border p-3 space-y-2"
                     onClick={() => setSelectedPostId(post.post_id)}
                     role="button"
                     tabIndex={0}
