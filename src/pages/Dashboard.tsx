@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from "react"
 import { Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, CartesianGrid, ComposedChart, Area, PieChart, Pie, Cell, Legend } from "recharts"
+import { motion } from "framer-motion"
 import { supabase } from "../lib/supabase"
 import Sidebar from "../components/Sidebar"
 import Topbar from "../components/Topbar"
@@ -25,6 +26,20 @@ const Dashboard = () => {
   const [clients, setClients] = useState<any[]>([])
   const [leads, setLeads] = useState<any[]>([])
   const [plannedContent, setPlannedContent] = useState<any[]>([])
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 16 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { staggerChildren: 0.06, duration: 0.35, ease: "easeOut" },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 12 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } },
+  }
 
   const formatKES = (value: number) =>
     value.toLocaleString("en-KE", { style: "currency", currency: "KES", maximumFractionDigits: 0 })
@@ -176,7 +191,12 @@ const Dashboard = () => {
       <Sidebar />
       <div className="flex flex-1 flex-col">
         <Topbar />
-        <main className="flex-1 space-y-6 p-6">
+        <motion.main
+          className="flex-1 space-y-6 p-6"
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+        >
           <PageHeader
             title="Dashboard"
             subtitle="Performance overview"
@@ -204,18 +224,31 @@ const Dashboard = () => {
           ) : (
             <>
               {/* KPI Cards */}
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-6">
-                <StatsCard label="Monthly revenue" value={formatKES(kpi.revenue)} delta="+12% MoM" />
-                <StatsCard label="Ad spend" value={formatKES(kpi.spend)} delta="+4% MoM" />
-                <StatsCard label="Leads captured" value={kpi.leads.toLocaleString()} delta="+6% MoM" />
-                <StatsCard label="Avg. CPL" value={formatKES(kpi.cpl)} delta="-9% MoM" />
-                <StatsCard label="Opportunities" value={kpi.opportunities.toLocaleString()} delta="+3% QoQ" />
-                <StatsCard label="Conv. Rate" value={kpi.conversionRate.toFixed(1) + '%'} delta="+2% MoM" />
-              </div>
+              <motion.div
+                className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-6"
+                variants={containerVariants}
+              >
+                {[
+                  <StatsCard label="Monthly revenue" value={formatKES(kpi.revenue)} delta="+12% MoM" />,
+                  <StatsCard label="Ad spend" value={formatKES(kpi.spend)} delta="+4% MoM" />,
+                  <StatsCard label="Leads captured" value={kpi.leads.toLocaleString()} delta="+6% MoM" />,
+                  <StatsCard label="Avg. CPL" value={formatKES(kpi.cpl)} delta="-9% MoM" />,
+                  <StatsCard label="Opportunities" value={kpi.opportunities.toLocaleString()} delta="+3% QoQ" />,
+                  <StatsCard label="Conv. Rate" value={kpi.conversionRate.toFixed(1) + '%'} delta="+2% MoM" />,
+                ].map((card, idx) => (
+                  <motion.div key={idx} variants={itemVariants}>
+                    {card}
+                  </motion.div>
+                ))}
+              </motion.div>
 
               {/* Main Charts Row */}
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
-                <ChartCard title="Spend vs Revenue">
+              <motion.div
+                className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3"
+                variants={containerVariants}
+              >
+                <motion.div variants={itemVariants}>
+                  <ChartCard title="Spend vs Revenue">
                   <div className="h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <ComposedChart data={campaigns.slice(0, 6)}>
@@ -240,8 +273,10 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                   </div>
                 </ChartCard>
+                </motion.div>
 
-                <ChartCard title="ROI by Campaign">
+                <motion.div variants={itemVariants}>
+                  <ChartCard title="ROI by Campaign">
                   <div className="h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={campaigns.slice(0, 6)} layout="vertical" margin={{ left: 80 }}>
@@ -265,8 +300,10 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                   </div>
                 </ChartCard>
+                </motion.div>
 
-                <ChartCard title="Lead Pipeline">
+                <motion.div variants={itemVariants}>
+                  <ChartCard title="Lead Pipeline">
                   <div className="h-72">
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={leadStageDistribution}>
@@ -281,11 +318,16 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                   </div>
                 </ChartCard>
-              </div>
+                </motion.div>
+              </motion.div>
 
               {/* Pie Charts Row */}
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <ChartCard title="Spend by Channel">
+              <motion.div
+                className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
+                variants={containerVariants}
+              >
+                <motion.div variants={itemVariants}>
+                  <ChartCard title="Spend by Channel">
                   <div className="h-48">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -308,8 +350,10 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                   </div>
                 </ChartCard>
+                </motion.div>
 
-                <ChartCard title="Campaign Status">
+                <motion.div variants={itemVariants}>
+                  <ChartCard title="Campaign Status">
                   <div className="h-48">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -335,8 +379,10 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                   </div>
                 </ChartCard>
+                </motion.div>
 
-                <ChartCard title="Lead Stages">
+                <motion.div variants={itemVariants}>
+                  <ChartCard title="Lead Stages">
                   <div className="h-48">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -362,8 +408,10 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                   </div>
                 </ChartCard>
+                </motion.div>
 
-                <ChartCard title="Client Health">
+                <motion.div variants={itemVariants}>
+                  <ChartCard title="Client Health">
                   <div className="h-48">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
@@ -386,21 +434,30 @@ const Dashboard = () => {
                     </ResponsiveContainer>
                   </div>
                 </ChartCard>
-              </div>
+                </motion.div>
+              </motion.div>
 
               {/* Tables Row */}
-              <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
-                <div className="xl:col-span-2">
+              <motion.div
+                className="grid grid-cols-1 gap-4 xl:grid-cols-3"
+                variants={containerVariants}
+              >
+                <motion.div variants={itemVariants} className="xl:col-span-2">
                   <CampaignTable campaigns={campaigns} />
-                </div>
-                <ClientList clients={clients} />
-              </div>
+                </motion.div>
+                <motion.div variants={itemVariants}>
+                  <ClientList clients={clients} />
+                </motion.div>
+              </motion.div>
 
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-                <div className="lg:col-span-2">
+              <motion.div
+                className="grid grid-cols-1 gap-4 lg:grid-cols-3"
+                variants={containerVariants}
+              >
+                <motion.div variants={itemVariants} className="lg:col-span-2">
                   <LeadTable leads={leads} />
-                </div>
-                <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+                </motion.div>
+                <motion.div variants={itemVariants} className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
                   <div className="border-b border-gray-100 px-4 py-3">
                     <h3 className="text-sm font-semibold text-gray-900">Planned Content</h3>
                     <p className="text-xs text-gray-500">From content_calendar</p>
@@ -424,11 +481,11 @@ const Dashboard = () => {
                       ))
                     )}
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </>
           )}
-        </main>
+        </motion.main>
       </div>
     </div>
   )
