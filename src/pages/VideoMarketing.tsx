@@ -157,12 +157,6 @@ const VideoMarketing = () => {
                 value={form.post_date}
                 onChange={(e) => onChange("post_date", e.target.value)}
               />
-              <input
-                type="time"
-                className="rounded-md border border-gray-200 px-3 py-2 text-sm"
-                value={form.post_time}
-                onChange={(e) => onChange("post_time", e.target.value)}
-              />
               <select
                 className="rounded-md border border-gray-200 px-3 py-2 text-sm"
                 value={form.status}
@@ -173,22 +167,9 @@ const VideoMarketing = () => {
                 <option>Scheduled</option>
                 <option>Published</option>
               </select>
-              <select
-                className="rounded-md border border-gray-200 px-3 py-2 text-sm md:col-span-2"
-                value={form.day_of_week}
-                onChange={(e) => onChange("day_of_week", e.target.value)}
-              >
-                <option>Monday</option>
-                <option>Tuesday</option>
-                <option>Wednesday</option>
-                <option>Thursday</option>
-                <option>Friday</option>
-                <option>Saturday</option>
-                <option>Sunday</option>
-              </select>
               <input
                 placeholder="Topic (e.g., Educational)"
-                className="rounded-md border border-gray-200 px-3 py-2 text-sm md:col-span-2"
+                className="rounded-md border border-gray-200 px-3 py-2 text-sm"
                 value={form.post_topic_type}
                 onChange={(e) => onChange("post_topic_type", e.target.value)}
               />
@@ -198,26 +179,11 @@ const VideoMarketing = () => {
                 value={form.post_copy}
                 onChange={(e) => onChange("post_copy", e.target.value)}
               />
-              <select
-                className="rounded-md border border-gray-200 px-3 py-2 text-sm"
-                value={form.visual_type}
-                onChange={(e) => onChange("visual_type", e.target.value)}
-              >
-                <option>Single Gif</option>
-                <option>Video</option>
-                <option>Single Still Image</option>
-              </select>
               <input
                 placeholder="Visual drive link"
                 className="rounded-md border border-gray-200 px-3 py-2 text-sm"
                 value={form.visual_drive_link}
                 onChange={(e) => onChange("visual_drive_link", e.target.value)}
-              />
-              <input
-                placeholder="Link to assets"
-                className="rounded-md border border-gray-200 px-3 py-2 text-sm"
-                value={form.link_to_assets}
-                onChange={(e) => onChange("link_to_assets", e.target.value)}
               />
               <button
                 type="submit"
@@ -229,7 +195,7 @@ const VideoMarketing = () => {
             </form>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
             <div className="border-b border-gray-100 px-4 py-3">
               <h3 className="text-sm font-semibold text-gray-900">Content calendar</h3>
             </div>
@@ -239,22 +205,20 @@ const VideoMarketing = () => {
                   <th className="px-3 py-2">Channel</th>
                   <th className="px-3 py-2">Status</th>
                   <th className="px-3 py-2">Date</th>
-                  <th className="px-3 py-2">Time</th>
                   <th className="px-3 py-2">Topic</th>
-                  <th className="px-3 py-2">Copy</th>
                   <th className="px-3 py-2">Links</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {loading ? (
                   <tr>
-                    <td className="px-3 py-4 text-center text-gray-600" colSpan={7}>
+                    <td className="px-3 py-4 text-center text-gray-600" colSpan={5}>
                       Loading calendar...
                     </td>
                   </tr>
                 ) : rows.length === 0 ? (
                   <tr>
-                    <td className="px-3 py-4 text-center text-gray-600" colSpan={7}>
+                    <td className="px-3 py-4 text-center text-gray-600" colSpan={5}>
                       No rows yet.
                     </td>
                   </tr>
@@ -268,9 +232,7 @@ const VideoMarketing = () => {
                         </span>
                       </td>
                       <td className="px-3 py-3 text-gray-700">{row.post_date}</td>
-                      <td className="px-3 py-3 text-gray-700">{row.post_time ?? "—"}</td>
                       <td className="px-3 py-3 text-gray-800">{row.post_topic_type ?? "—"}</td>
-                      <td className="px-3 py-3 text-gray-600">{row.post_copy ?? "—"}</td>
                       <td className="px-3 py-3 flex gap-2">
                         {row.visual_drive_link ? (
                           <a

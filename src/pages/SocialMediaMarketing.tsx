@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar"
 import Topbar from "../components/Topbar"
 import PageHeader from "../components/PageHeader"
 import StatsCard from "../components/StatsCard"
+import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 import ChartCard from "../components/ChartCard"
 
 type PostRecord = {
@@ -650,16 +651,57 @@ const SocialMediaMarketing = () => {
 
           {/* CHARTS */}
           <ChartCard title="Engagement trends">
-            Daily likes, comments, and saves across platforms.
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={posts}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="title" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="likes_count" fill="#8884d8" name="Likes" />
+                <Bar dataKey="comment_count" fill="#82ca9d" name="Comments" />
+                <Bar dataKey="view_count" fill="#ffc658" name="Views" />
+              </BarChart>
+            </ResponsiveContainer>
           </ChartCard>
 
           <ChartCard title="Platform breakdown">
-            Performance split by channel.
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={Object.entries(
+                    posts.reduce((acc, post) => {
+                      acc[post.source] = (acc[post.source] || 0) + 1
+                      return acc
+                    }, {} as Record<string, number>)
+                  ).map(([name, value]) => ({ name, value }))}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={100}
+                  fill="#8884d8"
+                  label
+                >
+                  {Object.entries(
+                    posts.reduce((acc, post) => {
+                      acc[post.source] = (acc[post.source] || 0) + 1
+                      return acc
+                    }, {} as Record<string, number>)
+                  ).map((_, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
           </ChartCard>
         </main>
       </div>
     </div>
   )
 }
+
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 export default SocialMediaMarketing
